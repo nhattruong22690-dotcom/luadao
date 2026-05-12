@@ -288,11 +288,11 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         })()}
       </div>
 
-      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0' }}>
+      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0', marginTop: '-3mm' }}>
         ------------------------------------------------------------------------------------------------------
       </div>
 
-      <div style={{ display: 'flex', gap: '2mm', alignItems: 'center', margin: '1mm 0' }}>
+      <div style={{ display: 'flex', gap: '2mm', alignItems: 'center', margin: '1mm 0', marginTop: '-2mm' }}>
         <div style={{ width: '25mm', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div className="receipt-qr" style={{ margin: '0' }}>
             <canvas ref={qrRef} style={{ width: '25mm', height: '25mm' }}></canvas>
@@ -326,7 +326,7 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         </div>
       </div>
 
-      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0' }}>
+      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0', marginTop: '-3mm' }}>
         ------------------------------------------------------------------------------------------------------
       </div>
     </div>
