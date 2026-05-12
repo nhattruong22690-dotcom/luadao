@@ -70,6 +70,13 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
     return `${displayDate} ${displayTime}`;
   };
 
+  const renderPrice = (price: number) => (
+    <>
+      {Number(price).toLocaleString()}
+      <span style={{ fontSize: '0.8em', marginLeft: '2px', position: 'relative', top: '-0.1em' }}>đ</span>
+    </>
+  );
+
   return (
     <div className="receipt" style={{ fontFamily: 'var(--font-coopxtra), monospace', lineHeight: '1.1' }}>
       <div className="receipt-header">
@@ -114,13 +121,13 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
               <tr style={{ fontSize: '8pt' }}>
                 <td style={{ width: '15%' }}>VAT{item.vat}%</td>
                 <td style={{ width: '25%', textAlign: 'center' }}>{item.qty} {item.unit || 'Cái'}</td>
-                <td style={{ width: '25%', textAlign: 'center' }}>{Number(item.price).toLocaleString()} đ</td>
-                <td style={{ width: '35%', textAlign: 'right' }}>{(item.qty * item.price).toLocaleString()} đ</td>
+                <td style={{ width: '25%', textAlign: 'center' }}>{renderPrice(item.price)}</td>
+                <td style={{ width: '35%', textAlign: 'right' }}>{renderPrice(item.qty * item.price)}</td>
               </tr>
               {item.originalPrice && (
                 <tr>
                   <td colSpan={4} style={{ padding: '0.5mm 0 0.5mm 3.1ch', fontSize: '7.5pt' }}>
-                    Gia goc: {item.originalPrice.toLocaleString()} đ
+                    Gia goc: {renderPrice(item.originalPrice)}
                   </td>
                 </tr>
               )}
@@ -140,18 +147,18 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>Tong tien:</span>
-          <span>{subTotal.toLocaleString()} đ</span>
+          <span>{renderPrice(subTotal)}</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>Tong Thuc Thanh Toan:</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>TNDV:</span>
-          <span>{finalTotal.toLocaleString()} đ</span>
+          <span>{renderPrice(finalTotal)}</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>Bao gom thue GTGT 8%:</span>
-          <span>{totalVAT.toLocaleString()} đ</span>
+          <span>{renderPrice(totalVAT)}</span>
         </div>
       </div>
 
