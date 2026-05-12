@@ -135,11 +135,11 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         </div>
       </div>
 
-      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0' }}>
+      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', marginTop: '-2mm' }}>
         ------------------------------------------------------------------------------------------------------
       </div>
 
-      <table className="receipt-table" style={{ fontSize: '8pt', borderSpacing: 0, marginTop: '1mm', width: '100%' }}>
+      <table className="receipt-table" style={{ fontSize: '8pt', borderSpacing: 0, marginTop: '-2mm', width: '100%' }}>
         <tbody>
           {data.items.map((item) => (
             <React.Fragment key={item.id}>
@@ -164,7 +164,7 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         </tbody>
       </table>
 
-      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0' }}>
+      <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '15pt', letterSpacing: '-0.5px', margin: '1mm 0', marginTop: '-4mm', marginBottom: '-2mm' }}>
         ------------------------------------------------------------------------------------------------------
       </div>
 
