@@ -28,7 +28,7 @@ const CatalogModal: React.FC<CatalogModalProps> = ({ catalog, onSave, onClose })
   const handleAdd = () => {
     setLocalCatalog([
       ...localCatalog,
-      { code: '', name: 'Sản phẩm mới', price: 0, vat: 8, isSpecial: false, unit: 'Cái' }
+      { code: '', name: 'Sản phẩm mới', price: 0, vat: 8, isSpecial: false, unit: 'Cái', originalPrice: undefined }
     ]);
   };
 
@@ -91,6 +91,7 @@ const CatalogModal: React.FC<CatalogModalProps> = ({ catalog, onSave, onClose })
                 <th style={{ width: '100px', padding: '1rem' }}>VAT%</th>
                 <th style={{ width: '100px', textAlign: 'center', padding: '1rem' }}>Nhóm ĐB?</th>
                 <th style={{ width: '120px', padding: '1rem' }}>ĐVT</th>
+                <th style={{ width: '150px', padding: '1rem' }}>Giá gốc (VNĐ)</th>
                 <th style={{ width: '60px', padding: '1rem' }}></th>
               </tr>
             </thead>
@@ -140,6 +141,15 @@ const CatalogModal: React.FC<CatalogModalProps> = ({ catalog, onSave, onClose })
                       style={inputStyle}
                       value={prod.unit || ''} 
                       onChange={(e) => handleUpdate(idx, 'unit', e.target.value)} 
+                    />
+                  </td>
+                  <td style={{ padding: '0.5rem' }}>
+                    <input 
+                      style={inputStyle}
+                      type="number" 
+                      placeholder="Giá gốc"
+                      value={prod.originalPrice || ''} 
+                      onChange={(e) => handleUpdate(idx, 'originalPrice', e.target.value ? Number(e.target.value) : undefined)} 
                     />
                   </td>
                   <td style={{ padding: '0.5rem' }}>

@@ -139,7 +139,7 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             <div>
-              <h1 className="text-3xl font-bold text-[var(--primary)] m-0">Hệ thống COOP</h1>
+              <h1 className="text-3xl font-bold text-(--primary) m-0">Hệ thống COOP</h1>
               <p className="text-[#94a3b8] mt-1">Giải pháp đào lửa</p>
             </div>
           </div>

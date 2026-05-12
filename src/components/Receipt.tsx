@@ -114,9 +114,16 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
               <tr style={{ fontSize: '8pt' }}>
                 <td style={{ width: '15%' }}>VAT{item.vat}%</td>
                 <td style={{ width: '25%', textAlign: 'center' }}>{item.qty} {item.unit || 'Cái'}</td>
-                <td style={{ width: '25%', textAlign: 'center' }}>{Number(item.price).toLocaleString()}</td>
-                <td style={{ width: '35%', textAlign: 'right' }}>{(item.qty * item.price).toLocaleString()} d</td>
+                <td style={{ width: '25%', textAlign: 'center' }}>{Number(item.price).toLocaleString()} đ</td>
+                <td style={{ width: '35%', textAlign: 'right' }}>{(item.qty * item.price).toLocaleString()} đ</td>
               </tr>
+              {item.originalPrice && (
+                <tr>
+                  <td colSpan={4} style={{ padding: '0.5mm 0 0.5mm 3.1ch', fontSize: '7.5pt' }}>
+                    Gia goc: {item.originalPrice.toLocaleString()} đ
+                  </td>
+                </tr>
+              )}
             </React.Fragment>
           ))}
         </tbody>
@@ -133,18 +140,18 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>Tong tien:</span>
-          <span>{subTotal.toLocaleString()} d</span>
+          <span>{subTotal.toLocaleString()} đ</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>Tong Thuc Thanh Toan:</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>TNDV:</span>
-          <span>{finalTotal.toLocaleString()} d</span>
+          <span>{finalTotal.toLocaleString()} đ</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
           <span>Bao gom thue GTGT 8%:</span>
-          <span>{totalVAT.toLocaleString()} d</span>
+          <span>{totalVAT.toLocaleString()} đ</span>
         </div>
       </div>
 

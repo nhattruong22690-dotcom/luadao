@@ -149,7 +149,8 @@ const CoopEditor: React.FC<EditorProps> = ({ data, setData, onPrint, onExportPDF
                 name: product.name,
                 price: product.price,
                 vat: product.vat,
-                unit: product.unit || 'Cái'
+                unit: product.unit || 'Cái',
+                originalPrice: product.originalPrice
               };
             }
           }
@@ -192,7 +193,8 @@ const CoopEditor: React.FC<EditorProps> = ({ data, setData, onPrint, onExportPDF
         price: prod.price,
         qty: qty,
         vat: prod.vat,
-        unit: prod.unit || 'Cái'
+        unit: prod.unit || 'Cái',
+        originalPrice: prod.originalPrice
       });
       currentSpecialSum += (prod.price * qty);
     }
@@ -225,7 +227,8 @@ const CoopEditor: React.FC<EditorProps> = ({ data, setData, onPrint, onExportPDF
         price: prod.price,
         qty: qty,
         vat: prod.vat,
-        unit: prod.unit || 'Cái'
+        unit: prod.unit || 'Cái',
+        originalPrice: prod.originalPrice
       });
     }
 
@@ -571,6 +574,7 @@ const CoopEditor: React.FC<EditorProps> = ({ data, setData, onPrint, onExportPDF
             <th style={{ width: '120px' }}>Giá</th>
             <th style={{ width: '80px' }}>VAT%</th>
             <th style={{ width: '80px' }}>ĐVT</th>
+            <th style={{ width: '120px' }}>Giá gốc</th>
             <th style={{ width: '50px' }}></th>
           </tr>
         </thead>
@@ -616,6 +620,14 @@ const CoopEditor: React.FC<EditorProps> = ({ data, setData, onPrint, onExportPDF
                   placeholder="ĐVT"
                   value={item.unit || ''}
                   onChange={(e) => updateItem(item.id, 'unit', e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  placeholder="Giá gốc"
+                  value={item.originalPrice || ''}
+                  onChange={(e) => updateItem(item.id, 'originalPrice', e.target.value ? Number(e.target.value) : undefined)}
                 />
               </td>
               <td>

@@ -27,7 +27,8 @@ export const parseExcelData = async (file: File): Promise<{
             price: Number(row['Giá'] || row['Price'] || 0),
             vat: Number(row['VAT'] || 8),
             isSpecial: row['Đặc biệt'] === 'Có' || row['Special'] === true || row['isSpecial'] === true,
-            unit: String(row['Đơn vị'] || row['Unit'] || row['ĐVT'] || 'Cái').trim()
+            unit: String(row['Đơn vị'] || row['Unit'] || row['ĐVT'] || 'Cái').trim(),
+            originalPrice: row['Giá gốc'] || row['OriginalPrice'] ? Number(row['Giá gốc'] || row['OriginalPrice']) : undefined
           })).filter(p => p.name && p.code);
         }
 
@@ -87,6 +88,7 @@ export const exportToExcel = (products: ProductTemplate[], config: BillData) => 
     'Giá': p.price,
     'VAT': p.vat,
     'Đơn vị': p.unit || 'Cái',
+    'Giá gốc': p.originalPrice || '',
     'Đặc biệt': p.isSpecial ? 'Có' : ''
   }));
   const productSheet = XLSX.utils.json_to_sheet(productData);

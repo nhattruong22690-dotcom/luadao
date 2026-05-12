@@ -6,6 +6,7 @@ export interface BillItem {
   price: number;
   vat: number;
   unit?: string;
+  originalPrice?: number;
 }
 
 export interface BillData {

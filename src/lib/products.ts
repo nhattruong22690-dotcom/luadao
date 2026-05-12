@@ -5,6 +5,7 @@ export interface ProductTemplate {
   vat: number;
   isSpecial: boolean;
   unit?: string;
+  originalPrice?: number;
 }
 
 export const defaultProductCatalog: ProductTemplate[] = [
