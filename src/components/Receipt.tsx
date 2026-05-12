@@ -73,7 +73,7 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
   const renderPrice = (price: number) => (
     <>
       {Number(price).toLocaleString()}
-      <span style={{ fontSize: '0.8em', marginLeft: '2px', position: 'relative', top: '-0.1em' }}>đ</span>
+      <span style={{ fontSize: '0.6em', marginLeft: '2px', position: 'relative', top: '-0.3em' }}>đ</span>
     </>
   );
 
