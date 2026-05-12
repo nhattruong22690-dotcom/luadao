@@ -65,7 +65,7 @@ export default function Home() {
       try {
         const parsed = JSON.parse(saved);
         const mergedData = { ...initialData, ...parsed };
-        
+
         if (!mergedData.dateTime || !/^\d{4}-\d{2}-\d{2}$/.test(mergedData.dateTime.split('T')[0])) {
           mergedData.dateTime = initialData.dateTime;
         }
@@ -101,13 +101,13 @@ export default function Home() {
     await new Promise(resolve => setTimeout(resolve, 200));
 
     try {
-      const canvas = await html2canvas(receiptEl, { 
+      const canvas = await html2canvas(receiptEl, {
         scale: 3,
         backgroundColor: '#ffffff',
         logging: false,
         useCORS: true
       });
-      
+
       const imgData = canvas.toDataURL('image/png', 1.0);
       const pdfWidth = 80;
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
@@ -151,12 +151,12 @@ export default function Home() {
       </div>
 
       <div className="preview-section">
-        <div className="no-print" style={{ 
-          width: '100%', 
+        <div className="no-print" style={{
+          width: '100%',
           maxWidth: '500px',
-          padding: '1rem', 
-          background: 'var(--bg-card)', 
-          borderRadius: '1rem', 
+          padding: '1rem',
+          background: 'var(--bg-card)',
+          borderRadius: '1rem',
           border: '1px solid var(--border)',
           marginBottom: '1.5rem',
           display: 'flex',
@@ -168,14 +168,14 @@ export default function Home() {
             <span style={{ fontSize: '0.875rem', color: '#94a3b8', fontWeight: '500' }}>Phóng to / Thu nhỏ xem thử</span>
             <span style={{ fontSize: '0.875rem', color: 'var(--primary)', fontWeight: 'bold' }}>{Math.round(zoom * 100)}%</span>
           </div>
-          <input 
-            type="range" 
-            min="0.5" 
-            max="2.5" 
-            step="0.1" 
-            value={zoom} 
+          <input
+            type="range"
+            min="0.5"
+            max="2.5"
+            step="0.1"
+            value={zoom}
             onChange={(e) => setZoom(parseFloat(e.target.value))}
-            style={{ 
+            style={{
               width: '100%',
               accentColor: 'var(--primary)',
               cursor: 'pointer'
@@ -183,13 +183,13 @@ export default function Home() {
           />
         </div>
 
-        <div style={{ 
-          display: 'flex', 
+        <div style={{
+          display: 'flex',
           justifyContent: 'center',
           width: '100%'
         }}>
-          <div style={{ 
-            zoom: zoom, 
+          <div style={{
+            zoom: zoom,
             display: 'inline-block'
           }}>
             <Receipt data={data} />
