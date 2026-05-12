@@ -41,7 +41,14 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
   const totalQty = data.items.reduce((sum, item) => sum + Number(item.qty), 0);
   const subTotal = data.items.reduce((sum, item) => sum + (Number(item.qty) * Number(item.price)), 0);
 
-  const totalVAT = Math.round(data.items.reduce((sum, item) => sum + (Number(item.qty) * (Number(item.price) - Number(item.price) / (1 + Number(item.vat) / 100))), 0));
+  const vatGroups = data.items.reduce((acc, item) => {
+    const vatRate = Number(item.vat);
+    const itemVAT = Math.round(Number(item.qty) * (Number(item.price) - Number(item.price) / (1 + vatRate / 100)));
+    acc[vatRate] = (acc[vatRate] || 0) + itemVAT;
+    return acc;
+  }, {} as Record<number, number>);
+
+  const sortedVatRates = Object.keys(vatGroups).map(Number).sort((a, b) => a - b);
   const finalTotal = subTotal;
 
   const formatFullDateTime = (dateStr: string, invoiceNo: string) => {
@@ -78,18 +85,39 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
   );
 
   return (
-    <div className="receipt" style={{ fontFamily: 'var(--font-coopxtra), monospace', lineHeight: '1.1' }}>
-      <div className="receipt-header">
-        <div className="receipt-logo" style={{ marginBottom: '1mm' }}>
-          <img src="/xtralogo.png" alt="CoopXtra Logo" style={{ width: '40mm', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <div className="receipt" style={{
+      width: '80mm',
+      margin: '0 auto',
+      fontFamily: 'var(--font-coopxtra), monospace',
+      lineHeight: '1.1'
+    }}>
+      <div className="receipt-header" style={{ marginTop: '8mm' }}>
+        <div className="receipt-logo" style={{ marginBottom: '2mm', display: 'flex', justifyContent: 'center' }}>
+          <img
+            src="/logoCOOP.png"
+            alt="Coop Logo"
+            style={{
+              width: '45%',
+              height: 'auto',
+              margin: '0 auto'
+            }}
+          />
         </div>
-        <div style={{ fontSize: '9.5pt', fontWeight: 'bold', marginTop: '1mm', marginBottom: '1mm' }}>{data.storeName}</div>
+        <div style={{ fontSize: '8pt', fontWeight: 'normal', marginTop: '0', marginBottom: '0.5mm' }}>
+          Co.opXtra Van Hanh
+        </div>
         <div style={{ fontSize: '8pt' }}>Ma so thue: {data.taxCode}</div>
         <div style={{ fontSize: '8pt', whiteSpace: 'pre-line', margin: '0.5mm 0', lineHeight: '1.2' }}>{data.address}</div>
         <div style={{ fontSize: '8pt' }}>DT: {data.phone} Hotline: {data.hotline}</div>
         <div style={{ fontSize: '8pt' }}>Email: {data.email}</div>
         <div style={{ fontSize: '8pt' }}>website: {data.website}</div>
-        <div style={{ fontSize: '11pt', fontWeight: 'bold', marginTop: '1mm', marginBottom: '1mm', letterSpacing: '0.5px' }}>{data.billTitle || 'PHIEU TINH TIEN'}</div>
+        <div style={{
+          fontSize: '11pt',
+          fontWeight: 'bold',
+          marginTop: '1mm',
+          marginBottom: '1mm',
+          letterSpacing: '0.5px'
+        }}>{data.billTitle || 'PHIEU TINH TIEN'}</div>
       </div>
       <div style={{ textAlign: 'center', fontSize: '8pt', marginBottom: '1mm' }}>{data.orderType || 'Don hang sieu thi'}</div>
 
@@ -150,28 +178,70 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
           <span>{renderPrice(subTotal)}</span>
         </div>
         <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
-          <span>Tong Thuc Thanh Toan:</span>
+          <span>Phuong Thuc Thanh Toan:</span>
         </div>
-        <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
-          <span>TNDV:</span>
-          <span>{renderPrice(finalTotal)}</span>
-        </div>
-        <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
-          <span>Bao gom thue GTGT 8%:</span>
-          <span>{renderPrice(totalVAT)}</span>
-        </div>
-      </div>
+        {(() => {
+          const seed = data.invoiceNo.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const isCash = seed % 2 === 0;
 
-      <div style={{ marginLeft: '2ch', marginTop: '1.5mm', marginBottom: '1.5mm' }}>
-        <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '4.5pt', letterSpacing: '0.5px', color: 'black' }}>
-          ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        </div>
-        <div style={{ fontSize: '8.5pt', whiteSpace: 'nowrap', margin: '0.3mm 0', fontWeight: '' }}>
-          Ghi chu: {data.note}
-        </div>
-        <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '4.5pt', letterSpacing: '0.5px', color: 'black' }}>
-          ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        </div>
+          if (isCash) {
+            const getCashGiven = (total: number, s: number) => {
+              if (total <= 0) return 0;
+              const options = [
+                Math.ceil(total / 10000) * 10000,
+                Math.ceil(total / 20000) * 20000,
+                Math.ceil(total / 50000) * 50000,
+                Math.ceil(total / 100000) * 100000,
+                Math.ceil(total / 200000) * 200000,
+                Math.ceil(total / 500000) * 500000
+              ];
+              const uniqueOptions = Array.from(new Set(options)).filter(o => o >= total).sort((a, b) => a - b);
+              const idx = s % Math.min(3, uniqueOptions.length);
+              return uniqueOptions[idx];
+            };
+
+            const cashGiven = getCashGiven(finalTotal, seed);
+            const change = cashGiven - finalTotal;
+
+            return (
+              <>
+                <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
+                  <span>Tien mat:</span>
+                  <span>{renderPrice(cashGiven)}</span>
+                </div>
+                <div className="receipt-row" style={{ margin: '0.5mm 0' }}>
+                  <span>Tien thoi lai:</span>
+                  <span>{renderPrice(change)}</span>
+                </div>
+              </>
+            );
+          } else {
+            const cardLast4 = "XXX";
+            const posId = (1 + (seed % 9)).toString().padStart(2, '0');
+
+            return (
+              <>
+                <div className="receipt-row" style={{ margin: '0.5mm 0 0 0', display: 'flex' }}>
+                  <span>The ngan hang:</span>
+                </div>
+                <div className="receipt-row" style={{ margin: '0 0 0.5mm 2ch', display: 'flex', justifyContent: 'flex-start' }}>
+                  <span style={{ width: '15ch' }}>So the</span>
+                  <span>: {cardLast4.toUpperCase()}</span>
+                </div>
+                <div className="receipt-row" style={{ margin: '0 0 0.5mm 2ch', display: 'flex', justifyContent: 'flex-start' }}>
+                  <span style={{ width: '15ch' }}>So may quet the</span>
+                  <span>: {posId}</span>
+                </div>
+              </>
+            );
+          }
+        })()}
+        {sortedVatRates.map((rate) => (
+          <div key={rate} className="receipt-row" style={{ margin: '0.5mm 0' }}>
+            <span>Bao gom thue GTGT {rate}%:</span>
+            <span>{renderPrice(vatGroups[rate])}</span>
+          </div>
+        ))}
       </div>
 
       <div style={{ textAlign: 'center', fontSize: '8pt', margin: '1mm 0', marginBottom: '-2mm', marginTop: '-1mm' }}>
@@ -222,7 +292,7 @@ const Receipt: React.FC<ReceiptProps> = ({ data }) => {
         ------------------------------------------------------------------------------------------------------
       </div>
 
-      <div style={{ display: 'flex', gap: '2mm', alignItems: 'flex-start', margin: '1mm 0' }}>
+      <div style={{ display: 'flex', gap: '2mm', alignItems: 'center', margin: '1mm 0' }}>
         <div style={{ width: '25mm', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div className="receipt-qr" style={{ margin: '0' }}>
             <canvas ref={qrRef} style={{ width: '25mm', height: '25mm' }}></canvas>
